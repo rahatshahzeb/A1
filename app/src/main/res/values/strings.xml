@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">A1</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="network_success">Network available.</string>
+    <string name="network_error">Network is not available.</string>
+    <string name="label_no_data">Nothing to show \nPull to refresh</string>
+</resources>
