@@ -2,23 +2,19 @@ package com.shahzeb.a1.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import com.shahzeb.a1.A1Constants;
 import com.shahzeb.a1.BaseActivity;
 import com.shahzeb.a1.R;
-import com.shahzeb.a1.fragment.ManufactureFragment;
-import com.shahzeb.a1.util.NetworkManager;
+import com.shahzeb.a1.fragment.SummaryFragment;
+import com.shahzeb.a1.fragment.UniversalFragment;
+import com.shahzeb.a1.model.Summary;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements Callback{
+public class MainActivity extends BaseActivity implements UniversalFragment.OnFragmentInteractionListener{
 
     private final static String TAG = MainActivity.class.getSimpleName();
 
@@ -32,26 +28,11 @@ public class MainActivity extends BaseActivity implements Callback{
 
         ButterKnife.bind(this);
 
-//        NetworkManager.getInstance().fetchManufacturers(0, 10, this);
         addFragment(getSupportFragmentManager(),
-                ManufactureFragment.newInstance(),
+                UniversalFragment.newInstance(A1Constants.FragmentType.MANUFACTURER, null, null),
                 R.id.fragment_container,
                 A1Constants.TAG_FRAGMENT_MANUFACTURER,
                 false, true);
-    }
-
-    @Override
-    public void onResponse(Call call, Response response) {
-        if (response.code() == A1Constants.HTTP_SUCCESS ) {
-            Log.v(TAG, "Success");
-        } else {
-            Log.v(TAG, "Error");
-        }
-    }
-
-    @Override
-    public void onFailure(Call call, Throwable t) {
-        Log.v(TAG, "Failed");
     }
 
     @Override
@@ -64,6 +45,23 @@ public class MainActivity extends BaseActivity implements Callback{
             } else {
                 Snackbar.make(mParentView, getString(R.string.network_error), Snackbar.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(A1Constants.FragmentType fragmentType, String manufacturer, String mainType, String builtDate) {
+        if (fragmentType == A1Constants.FragmentType.MAIN_TYPE) {
+            replaceFragment(getSupportFragmentManager(),
+                    UniversalFragment.newInstance(A1Constants.FragmentType.MAIN_TYPE, manufacturer, mainType),
+                    R.id.fragment_container, A1Constants.TAG_FRAGMENT_MAIN_TYPE, true, true);
+        } else if (fragmentType == A1Constants.FragmentType.BUILT_DATES) {
+            replaceFragment(getSupportFragmentManager(),
+                    UniversalFragment.newInstance(A1Constants.FragmentType.BUILT_DATES, manufacturer, mainType),
+                    R.id.fragment_container, A1Constants.TAG_FRAGMENT_BUILT_DATES, true, true);
+        } else if (fragmentType == A1Constants.FragmentType.SUMMARY) {
+            replaceFragment(getSupportFragmentManager(),
+                    SummaryFragment.newInstance(new Summary(manufacturer.split(",")[1], mainType, builtDate)),
+                    R.id.fragment_container, A1Constants.TAG_FRAGMENT_SUMMARY, true, true);
         }
     }
 }

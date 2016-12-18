@@ -2,6 +2,8 @@ package com.shahzeb.a1;
 
 import android.support.v4.app.Fragment;
 
+import com.shahzeb.a1.adapter.RecyclerViewAdapter;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -9,11 +11,14 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public abstract class BaseFragment extends Fragment implements Callback{
+public abstract class BaseFragment extends Fragment implements Callback, RecyclerViewAdapter.RecyclerViewAdapterCallback{
 
     @Override
-    public abstract void onResponse(Call call, Response response);
+    public void onResponse(Call call, Response response){}
 
     @Override
-    public abstract void onFailure(Call call, Throwable t);
+    public void onFailure(Call call, Throwable t){}
+
+    @Override
+    public void onItemClick(int position){}
 }

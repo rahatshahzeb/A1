@@ -37,7 +37,7 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mBaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
-                mValid = mBaseAdapter.getItemCount()>0;
+                mValid = mBaseAdapter.getItemCount() > 0;
                 notifyDataSetChanged();
             }
 
@@ -65,7 +65,7 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public static class SectionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tv_title)
-        TextView mTvTitle;
+        TextView tvTitle;
 
         int position;
 
@@ -98,7 +98,7 @@ public class SectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(RecyclerView.ViewHolder sectionViewHolder, int position) {
         if (isSectionHeaderPosition(position)) {
             ((SectionViewHolder)sectionViewHolder).position = position;
-            ((SectionViewHolder)sectionViewHolder).mTvTitle.setText(mSections.get(position).title);
+            ((SectionViewHolder)sectionViewHolder).tvTitle.setText(mSections.get(position).title);
         }else{
             mBaseAdapter.onBindViewHolder(sectionViewHolder,sectionedPositionToPosition(position));
         }

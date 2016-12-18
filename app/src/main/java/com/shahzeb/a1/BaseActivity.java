@@ -57,7 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity implements OnNetwor
         }
     }
 
-    protected void replaceFragment(FragmentManager fm, Fragment fragment, int containerId, String tag, boolean addToBackStack, boolean shouldAnimate) {
+    public void replaceFragment(FragmentManager fm, Fragment fragment, int containerId, String tag, boolean addToBackStack, boolean shouldAnimate) {
         FragmentTransaction transaction = fm.beginTransaction();
         if (shouldAnimate) {
             transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_left, R.anim.slide_out_right);

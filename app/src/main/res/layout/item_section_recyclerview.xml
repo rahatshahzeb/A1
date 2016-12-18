@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ly_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/grey_0">
@@ -9,6 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:textStyle="bold"/>
+        android:textSize="18sp"
+        android:layout_marginTop="@dimen/list_item_margin"
+        android:layout_marginBottom="@dimen/list_item_margin"
+        android:textColor="@color/grey_900"
+        android:textStyle="bold"
+        android:layout_marginLeft="@dimen/list_item_margin" />
 
 </RelativeLayout>

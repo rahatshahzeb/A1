@@ -60,13 +60,13 @@ public class NetworkManager{
     }
     //endregion
 
-    public void fetchManufacturers(int page, int pageSize, Callback callback) {
-        Call<A1Response> call = NetworkManager.getInstance().getInterface().getManufacturers(A1Constants.KEY_WA, page,pageSize);
+    public void fetchManufacturers(int page, Callback callback) {
+        Call<A1Response> call = NetworkManager.getInstance().getInterface().getManufacturers(A1Constants.KEY_WA, page, A1Constants.PAGE_SIZE);
         call.enqueue(callback);
     }
 
-    public void fetchMainTypes(String manufacturer, int page, int pageSize, Callback callback) {
-        Call<A1Response> call = NetworkManager.getInstance().getInterface().getMainTypes(A1Constants.KEY_WA, manufacturer, page,pageSize);
+    public void fetchMainTypes(String manufacturer, int page, Callback callback) {
+        Call<A1Response> call = NetworkManager.getInstance().getInterface().getMainTypes(A1Constants.KEY_WA, manufacturer, page, A1Constants.PAGE_SIZE);
         call.enqueue(callback);
     }
 
