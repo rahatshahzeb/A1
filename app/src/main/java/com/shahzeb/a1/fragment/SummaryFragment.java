@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.shahzeb.a1.A1Constants;
 import com.shahzeb.a1.BaseFragment;
 import com.shahzeb.a1.R;
-import com.shahzeb.a1.model.BuiltDates;
-import com.shahzeb.a1.model.MainType;
-import com.shahzeb.a1.model.Manufacturer;
+import com.shahzeb.a1.model.Recents;
 import com.shahzeb.a1.model.Summary;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,17 +63,44 @@ public class SummaryFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mTvManufacturer.setText(mSummary.manufacturer.split(",")[1]);
+        mTvManufacturer.setText(getManufacturerName());
         mTvMainType.setText(mSummary.mainType);
         mTvBuiltDate.setText(mSummary.builtDate);
 
-        Manufacturer manufacturer = new Manufacturer(mSummary.manufacturer.split(",")[0], mSummary.manufacturer.split(",")[1]);
-        manufacturer.save();
+        insertUniqueItem();
+    }
 
-        MainType mainType = new MainType(mSummary.mainType, mSummary.mainType);
-        mainType.save();
+    private void insertUniqueItem() {
+        List<Recents> list = Recents.listAll(Recents.class);
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).manufacturer.equals(mSummary.manufacturer)
+                    && list.get(i).mainType.equals(mSummary.mainType)
+                    && list.get(i).builtDate.equals(mSummary.builtDate)) {
+                break;
+            }
 
-        BuiltDates builtDates = new BuiltDates(mSummary.builtDate, mSummary.builtDate);
-        builtDates.save();
+        }
+        Recents recent = new Recents(mSummary.manufacturer, mSummary.mainType, mSummary.builtDate);
+        recent.save();
+    }
+
+    private String getManufacturerName() {
+        if (mSummary != null && mSummary.manufacturer != null) {
+            String[] parts = mSummary.manufacturer.split(",");
+            if (parts.length > 1){
+                return parts[1];
+            }
+        }
+        return null;
+    }
+
+    private String getManufacturerId() {
+        if (mSummary != null && mSummary.manufacturer != null) {
+            String[] parts = mSummary.manufacturer.split(",");
+            if (parts.length > 0){
+                return parts[0];
+            }
+        }
+        return null;
     }
 }

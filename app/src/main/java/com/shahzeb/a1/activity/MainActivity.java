@@ -9,6 +9,7 @@ import com.shahzeb.a1.BaseActivity;
 import com.shahzeb.a1.R;
 import com.shahzeb.a1.fragment.SummaryFragment;
 import com.shahzeb.a1.fragment.UniversalFragment;
+import com.shahzeb.a1.model.Recents;
 import com.shahzeb.a1.model.Summary;
 
 import butterknife.BindView;

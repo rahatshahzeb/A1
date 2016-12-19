@@ -3,6 +3,9 @@ package com.shahzeb.a1.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.orm.SugarRecord;
+import com.orm.dsl.Table;
+
 public class Summary implements Parcelable {
 
     public String manufacturer;
@@ -15,6 +18,7 @@ public class Summary implements Parcelable {
         this.builtDate = builtDate;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -25,9 +29,6 @@ public class Summary implements Parcelable {
         dest.writeString(this.manufacturer);
         dest.writeString(this.mainType);
         dest.writeString(this.builtDate);
-    }
-
-    public Summary() {
     }
 
     protected Summary(Parcel in) {

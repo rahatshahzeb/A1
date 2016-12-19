@@ -1,8 +1,12 @@
 package com.shahzeb.a1.model;
 
-import com.orm.SugarRecord;
+public class Item{
 
-public class Item extends SugarRecord {
-    public String key;
-    public String value;
+    public String keyValue;
+
+    public Item(){}
+
+    public Item(String keyValue){
+        this.keyValue = keyValue;
+    }
 }
