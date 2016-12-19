@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity implements UniversalFragment.OnFr
                     R.id.fragment_container, A1Constants.TAG_FRAGMENT_BUILT_DATES, true, true);
         } else if (fragmentType == A1Constants.FragmentType.SUMMARY) {
             replaceFragment(getSupportFragmentManager(),
-                    SummaryFragment.newInstance(new Summary(manufacturer.split(",")[1], mainType, builtDate)),
+                    SummaryFragment.newInstance(new Summary(manufacturer, mainType, builtDate)),
                     R.id.fragment_container, A1Constants.TAG_FRAGMENT_SUMMARY, true, true);
         }
     }

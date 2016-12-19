@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.orm.SugarRecord;
 import com.shahzeb.a1.A1Constants;
 import com.shahzeb.a1.BaseFragment;
 import com.shahzeb.a1.R;
@@ -54,7 +55,11 @@ public class UniversalFragment extends BaseFragment implements SwipeRefreshLayou
     private String mMainType;
     private String mBuiltDate;
 
-    private ArrayList<String> mDataset = new ArrayList<>();
+    private List<Manufacturer> mManufacturerList = new ArrayList<>();
+    private List<MainType> mMainTypeList = new ArrayList<>();
+    private List<BuiltDates> mBuiltDatesList = new ArrayList<>();
+
+//    private ArrayList<String> mDataset = new ArrayList<>();
     private LinkedHashMap<String, String> mMap = new LinkedHashMap<>();
     private List<SectionRecyclerViewAdapter.Section> mSectionsDataset = new ArrayList<>();
     private LinearLayoutManager mLayoutManager;
@@ -129,6 +134,23 @@ public class UniversalFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        mManufacturerList.clear();
+        mManufacturerList = Manufacturer.listAll(Manufacturer.class);
+
+        mMainTypeList.clear();
+        mMainTypeList = MainType.listAll(MainType.class);
+
+        mBuiltDatesList.clear();
+        mBuiltDatesList = BuiltDates.listAll(BuiltDates.class);
+
+        addSections();
+        setAdapter();
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -147,9 +169,53 @@ public class UniversalFragment extends BaseFragment implements SwipeRefreshLayou
 
     private void addSections() {
         mSectionsDataset.clear();
-        mSectionsDataset.add(new SectionRecyclerViewAdapter.Section(0,"Recent"));
-        mSectionsDataset.add(new SectionRecyclerViewAdapter.Section(4,"Recent"));
+//        if (mFragmentType == A1Constants.FragmentType.MANUFACTURER && mManufacturerList.size() > 0) {
+//            mSectionsDataset.add(new SectionRecyclerViewAdapter.Section(0, "Recent"));
+//            mSectionsDataset.add(new SectionRecyclerViewAdapter.Section(mManufacturerList.size(), "All"));
+//            addManufacturerItem();
+//        } else if (mFragmentType == A1Constants.FragmentType.MAIN_TYPE && mMainTypeList.size() > 0) {
+//            mSectionsDataset.add(new SectionRecyclerViewAdapter.Section(0, "Recent"));
+//            mSectionsDataset.add(new SectionRecyclerViewAdapter.Section(mMainTypeList.size(), "All"));
+//            addMainTypeItem();
+//        } else if (mFragmentType == A1Constants.FragmentType.BUILT_DATES && mBuiltDatesList.size() > 0) {
+//            mSectionsDataset.add(new SectionRecyclerViewAdapter.Section(0, "Recent"));
+//            mSectionsDataset.add(new SectionRecyclerViewAdapter.Section(mBuiltDatesList.size(), "All"));
+//            addBuiltDateItem();
+//        }
     }
+
+//    private void addManufacturerItem(){
+//        HashMap<String, String> temp = (HashMap<String, String>) mMap.clone();
+//        mMap.clear();
+//        for (int i = 0; i < mManufacturerList.size(); i++) {
+//            if (!mMap.containsKey(mManufacturerList.get(i).key)) {
+//                mMap.put(mManufacturerList.get(i).key, mManufacturerList.get(i).value);
+//            }
+//        }
+//        mMap.putAll(temp);
+//    }
+//
+//    private void addMainTypeItem(){
+//        HashMap<String, String> temp = (HashMap<String, String>) mMap.clone();
+//        mMap.clear();
+//        for (int i = 0; i < mMainTypeList.size(); i++) {
+//            if (!mMap.containsKey(mMainTypeList.get(i).key)) {
+//                mMap.put(mMainTypeList.get(i).key, mMainTypeList.get(i).value);
+//            }
+//        }
+//        mMap.putAll(temp);
+//    }
+//
+//    private void addBuiltDateItem(){
+//        HashMap<String, String> temp = (HashMap<String, String>) mMap.clone();
+//        mMap.clear();
+//        for (int i = 0; i < mBuiltDatesList.size(); i++) {
+//            if (!mMap.containsKey(mBuiltDatesList.get(i).key)) {
+//                mMap.put(mBuiltDatesList.get(i).key, mBuiltDatesList.get(i).value);
+//            }
+//        }
+//        mMap.putAll(temp);
+//    }
 
     public void setScrollListener() {
         mRecyclerViewScrollListener = new RecyclerView.OnScrollListener() {
@@ -200,7 +266,7 @@ public class UniversalFragment extends BaseFragment implements SwipeRefreshLayou
 
     public void setAdapter() {
         if (mAdapter == null) {
-            mAdapter = new RecyclerViewAdapter(getActivity(), mDataset, this);
+            mAdapter = new RecyclerViewAdapter(getActivity(), new ArrayList<>(mMap.values()), this);
         }
         if (mSectionedAdapter == null) {
             mSectionedAdapter = new SectionRecyclerViewAdapter(getActivity(),R.layout.item_section_recyclerview ,mAdapter);
@@ -208,12 +274,12 @@ public class UniversalFragment extends BaseFragment implements SwipeRefreshLayou
         } else {
             SectionRecyclerViewAdapter.Section[] dummy = new SectionRecyclerViewAdapter.Section[mSectionsDataset.size()];
             mSectionedAdapter.setSections(mSectionsDataset.toArray(dummy));
-            mAdapter.notifyAdapter(mDataset);
+            mAdapter.notifyAdapter(new ArrayList<>(mMap.values()));
         }
     }
 
     private boolean isDataSetEmpty() {
-        if (mDataset != null && mDataset.size() != 0) {
+        if (mMap != null && mMap.size() != 0) {
             return false;
         }
         return true;
@@ -255,7 +321,7 @@ public class UniversalFragment extends BaseFragment implements SwipeRefreshLayou
     public void onRefresh() {
         setProgressVisibility(true);
         mPage = 0;
-        mDataset.clear();
+//        mDataset.clear();
         mMap.clear();
         fetchData();
     }
@@ -270,7 +336,7 @@ public class UniversalFragment extends BaseFragment implements SwipeRefreshLayou
                 mTotalPageCount = a1Response.totalPageCount;
             }
             mMap.putAll(a1Response.wkda);
-            mDataset.addAll(new ArrayList<>(a1Response.wkda.values()));
+//            mDataset.addAll(new ArrayList<>(a1Response.wkda.values()));
             setAdapter();
 
             if (mTotalPageCount > 1 && mPage == 1) {
@@ -298,15 +364,12 @@ public class UniversalFragment extends BaseFragment implements SwipeRefreshLayou
         mSectionedAdapter = null;
 
         if (mFragmentType == A1Constants.FragmentType.MANUFACTURER) {
-            Manufacturer manufacturer = new Manufacturer(keys.get(position), mDataset.get(position));
-            mManufacturer = keys.get(position) + "," + mDataset.get(position);
+            mManufacturer = keys.get(position) + "," + mMap.get(keys.get(position));
             mListener.onFragmentInteraction(A1Constants.FragmentType.MAIN_TYPE, mManufacturer, mMainType, mBuiltDate);
         } else if (mFragmentType == A1Constants.FragmentType.MAIN_TYPE) {
-            MainType mainType = new MainType(keys.get(position), mDataset.get(position));
             mMainType = keys.get(position);
             mListener.onFragmentInteraction(A1Constants.FragmentType.BUILT_DATES, mManufacturer, mMainType, mBuiltDate);
         } else if (mFragmentType == A1Constants.FragmentType.BUILT_DATES) {
-            BuiltDates builtDates = new BuiltDates(keys.get(position), mDataset.get(position));
             mBuiltDate = keys.get(position);
             mListener.onFragmentInteraction(A1Constants.FragmentType.SUMMARY, mManufacturer, mMainType, mBuiltDate);
         }

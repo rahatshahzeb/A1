@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.shahzeb.a1.A1Constants;
 import com.shahzeb.a1.BaseFragment;
 import com.shahzeb.a1.R;
+import com.shahzeb.a1.model.BuiltDates;
+import com.shahzeb.a1.model.MainType;
+import com.shahzeb.a1.model.Manufacturer;
 import com.shahzeb.a1.model.Summary;
 
 import butterknife.BindView;
@@ -60,8 +63,17 @@ public class SummaryFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mTvManufacturer.setText(mSummary.manufacturer);
+        mTvManufacturer.setText(mSummary.manufacturer.split(",")[1]);
         mTvMainType.setText(mSummary.mainType);
         mTvBuiltDate.setText(mSummary.builtDate);
+
+        Manufacturer manufacturer = new Manufacturer(mSummary.manufacturer.split(",")[0], mSummary.manufacturer.split(",")[1]);
+        manufacturer.save();
+
+        MainType mainType = new MainType(mSummary.mainType, mSummary.mainType);
+        mainType.save();
+
+        BuiltDates builtDates = new BuiltDates(mSummary.builtDate, mSummary.builtDate);
+        builtDates.save();
     }
 }
